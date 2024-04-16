@@ -299,3 +299,29 @@ function pseudo_inverse(W::SparseMatrixCSC)
     W_inv = spdiagm(0 => diag_values)
     return W_inv
 end
+
+"""
+    I_gamma(HT::SparseMatrixCSC)
+
+Compute the I_gamma matrix for a given sparse matrix HT.
+
+# Arguments
+- `HT::SparseMatrixCSC`: The input sparse matrix.
+
+# Returns
+- `Igamma::SparseMatrixCSC`: The resulting I_gamma matrix.
+"""
+function I_gamma(HT::SparseMatrixCSC)
+    vec_1 = [1 for i in 1:size(HT, 2)]
+
+    # Calculer le produit
+    row_sums = HT*vec_1
+
+    # Prendre la valeur absolue de chaque élément
+    abs_row_sums = abs.(row_sums)
+
+    # Créer une matrice diagonale creuse avec elements ligne comme valeurs diagonales
+    Igamma = spdiagm(0 => abs_row_sums)
+
+    return Igamma
+end
